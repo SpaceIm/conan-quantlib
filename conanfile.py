@@ -40,6 +40,10 @@ class QuantlibConan(ConanFile):
     def requirements(self):
         self.requires("boost/1.76.0")
 
+    def validate(self):
+        if self.settings.compiler.get_safe("cppstd"):
+            tools.check_min_cppstd(self, 11)
+
     def source(self):
         tools.get(**self.conan_data["sources"][self.version],
                   destination=self._source_subfolder, strip_root=True)
@@ -48,6 +52,8 @@ class QuantlibConan(ConanFile):
         if self._cmake:
             return self._cmake
         self._cmake = CMake(self)
+        if not tools.valid_min_cppstd(self, 11):
+            self._cmake.definitions["CMAKE_CXX_STANDARD"] = 11
         self._cmake.definitions["USE_BOOST_DYNAMIC_LIBRARIES"] = False # even if boost shared, the underlying upstream logic doesn't matter for conan
         if self.settings.compiler == "Visual Studio":
             self._cmake.definitions["MSVC_RUNTIME"] = "dynamic" if "MD" in str(self.settings.compiler.runtime) else "static"

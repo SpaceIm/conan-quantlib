@@ -31,24 +31,10 @@ struct integrand {
 
 int main() {
     try {
-        /*
-        Integrates the function above over several dimensions, the size of the
-        vector argument is the dimension one.
-        Both algorithms are not really on the same stand since the quadrature
-        will be incorrect to use if the integrand is not appropiately behaved. Over
-        dimension 3 you might need to modify the points in the integral to retain a
-        sensible computing time.
-        */
         QuantLib::Size dimension = 3;
         QuantLib::Real exactSol = std::pow(std::exp(-.25) * std::sqrt(M_PI), static_cast<QuantLib::Real>(dimension));
 
         QuantLib::ext::function<QuantLib::Real(const std::vector<QuantLib::Real>& arg)> f = integrand();
-
-#ifndef QL_PATCH_SOLARIS
-        QuantLib::GaussianQuadMultidimIntegrator intg(dimension, 15);
-
-        QuantLib::Real valueQuad = intg(f);
-#endif
 
         std::vector<QuantLib::ext::shared_ptr<QuantLib::Integrator> > integrals;
         for (QuantLib::Size i = 0; i < dimension; ++i) {
@@ -63,9 +49,6 @@ int main() {
         std::cout << std::fixed << std::setprecision(4);
         std::cout << std::endl << "-------------- " << std::endl
                   << "Exact: " << exactSol << std::endl
-#ifndef QL_PATCH_SOLARIS
-                  << "Quad: " << valueQuad << std::endl
-#endif
                   << "Grid: " << valueGrid << std::endl
                   << std::endl;
 
