@@ -52,8 +52,6 @@ class QuantlibConan(ConanFile):
         if self._cmake:
             return self._cmake
         self._cmake = CMake(self)
-        if not tools.valid_min_cppstd(self, 11):
-            self._cmake.definitions["CMAKE_CXX_STANDARD"] = 11
         self._cmake.definitions["USE_BOOST_DYNAMIC_LIBRARIES"] = False # even if boost shared, the underlying upstream logic doesn't matter for conan
         if self.settings.compiler == "Visual Studio":
             self._cmake.definitions["MSVC_RUNTIME"] = "dynamic" if "MD" in str(self.settings.compiler.runtime) else "static"
