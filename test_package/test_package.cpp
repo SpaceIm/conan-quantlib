@@ -9,6 +9,7 @@
 #include <ql/functional.hpp>
 
 #include <cmath>
+#include <exception>
 #include <iomanip>
 #include <iostream>
 #include <vector>
