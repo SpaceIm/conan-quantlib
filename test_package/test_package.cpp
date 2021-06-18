@@ -36,6 +36,9 @@ int main() {
 
         QuantLib::ext::function<QuantLib::Real(const std::vector<QuantLib::Real>& arg)> f = integrand();
 
+        QuantLib::GaussianQuadMultidimIntegrator intg(dimension, 15);
+        QuantLib::Real valueQuad = intg(f);
+
         std::vector<QuantLib::ext::shared_ptr<QuantLib::Integrator> > integrals;
         for (QuantLib::Size i = 0; i < dimension; ++i) {
             integrals.push_back(QuantLib::ext::make_shared<QuantLib::TrapezoidIntegral<QuantLib::Default> >(1.e-4, 20));
@@ -49,6 +52,7 @@ int main() {
         std::cout << std::fixed << std::setprecision(4);
         std::cout << std::endl << "-------------- " << std::endl
                   << "Exact: " << exactSol << std::endl
+                  << "Quad: " << valueQuad << std::endl
                   << "Grid: " << valueGrid << std::endl
                   << std::endl;
 
